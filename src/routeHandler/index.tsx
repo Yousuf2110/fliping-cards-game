@@ -3,6 +3,7 @@ import {NavigationContainer} from '@react-navigation/native';
 import {createNativeStackNavigator} from '@react-navigation/native-stack';
 import Home from '../screens/home';
 import Game from '../screens/game';
+import {SCREEN} from '../constants/screen';
 
 const Stack = createNativeStackNavigator();
 
@@ -13,8 +14,8 @@ const RouteHandler = () => {
         screenOptions={{
           headerShown: false,
         }}>
-        <Stack.Screen name={'Home'} component={Home} />
-        <Stack.Screen name={'Game'} component={Game} />
+        <Stack.Screen name={SCREEN.HOME} component={Home} />
+        <Stack.Screen name={SCREEN.GAME} component={Game} />
       </Stack.Navigator>
     </NavigationContainer>
   );

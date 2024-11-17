@@ -1,0 +1,9 @@
+export const THEME = {
+  PRIMARY: '#FFA500',
+  BLACK: '#000000',
+  BLUE: '#0000FF',
+  WHITE: '#FFFFFF',
+  BACKGROUND: '#1F1F2F',
+  RED: '#FF0000',
+  YELLOW: '#FFFF00',
+};
