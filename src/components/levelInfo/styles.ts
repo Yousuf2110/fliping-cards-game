@@ -1,20 +1,29 @@
 import {StyleSheet} from 'react-native';
 import {heightPercentageToDP as hp} from 'react-native-responsive-screen';
-import {RFPercentage} from 'react-native-responsive-fontsize';
 import {THEME} from '../../constants/theme';
+import {RFPercentage} from 'react-native-responsive-fontsize';
 
 export const styles = StyleSheet.create({
-  centeredView: {
+  container: {
     flex: 1,
-    justifyContent: 'center',
+    backgroundColor: THEME.MODAL_BACKGROUND,
     alignItems: 'center',
+    justifyContent: 'center',
+  },
+  iconRow: {
+    flexDirection: 'row',
+    width: '100%',
+    justifyContent: 'center',
+    marginTop: hp(8),
   },
   modalView: {
-    width: '100%',
-    paddingVertical: hp(3),
-    backgroundColor: THEME.BACKGROUND,
-    alignItems: 'center',
+    width: '90%',
+    alignSelf: 'center',
+    backgroundColor: THEME.PRIMARY,
+    borderRadius: 20,
+    paddingVertical: hp(5),
     justifyContent: 'center',
+    alignItems: 'center',
     shadowColor: '#000',
     shadowOffset: {
       width: 0,
@@ -24,12 +33,17 @@ export const styles = StyleSheet.create({
     shadowRadius: 4,
     elevation: 5,
   },
-  title: {
-    fontFamily: 'Poppins-Bold',
-    fontSize: RFPercentage(3.5),
-    color: THEME.WHITE,
-    textShadowColor: 'rgba(0, 0, 0, 0.75)',
-    textShadowOffset: {width: -1, height: 1},
-    textShadowRadius: 5,
+  youWonText: {
+    fontSize: RFPercentage(5),
+    fontWeight: 'bold',
+    color: THEME.YELLOW,
+    textAlign: 'center',
+    marginVertical: 20,
+  },
+  footer: {
+    bottom: 0,
+    marginBottom: hp(10),
+    position: 'absolute',
+    width: '100%',
   },
 });

@@ -1,10 +1,11 @@
 import React from 'react';
 import {View, Text, TouchableOpacity} from 'react-native';
-import {styles} from './styles';
-import AntDesign from 'react-native-vector-icons/AntDesign';
-import Ionicons from 'react-native-vector-icons/Ionicons';
-import {THEME} from '../../constants/theme';
 import {useNavigation} from '@react-navigation/native';
+import Ionicons from 'react-native-vector-icons/Ionicons';
+import AntDesign from 'react-native-vector-icons/AntDesign';
+
+import {styles} from './styles';
+import {THEME} from '../../constants/theme';
 
 const Header = ({level, seconds, hideIcons}: any) => {
   const navigation: any = useNavigation();

@@ -1,4 +1,4 @@
-import React from 'react';
+import React, {useState} from 'react';
 import {Animated, View} from 'react-native';
 import {useNavigation} from '@react-navigation/native';
 
@@ -8,9 +8,11 @@ import {Easing} from 'react-native';
 import Card from '../../components/card';
 import {SCREEN} from '../../constants/screen';
 import Button from '../../components/button';
+import LevelInfo from '../../components/levelInfo';
 
 const Game = () => {
   const navigation: any = useNavigation();
+  const [levelInfoModal, setLevelInfoModal] = useState(false);
   const [cardAnimation] = React.useState(new Animated.Value(0));
 
   React.useEffect(() => {
@@ -64,10 +66,14 @@ const Game = () => {
         <View style={{width: '50%'}}>
           <Button
             title={'Pause'}
-            onPress={() => navigation.navigate(SCREEN.GAME)}
+            onPress={() => setLevelInfoModal(!levelInfoModal)}
           />
         </View>
       </View>
+      <LevelInfo
+        levelInfoModal={levelInfoModal}
+        setLevelInfoModal={setLevelInfoModal}
+      />
     </View>
   );
 };
