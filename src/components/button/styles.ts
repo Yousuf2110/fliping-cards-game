@@ -8,9 +8,9 @@ import {RFPercentage} from 'react-native-responsive-fontsize';
 
 export const styles = StyleSheet.create({
   button: {
-    width: '75%',
+    width: '80%',
     height: hp(6.6),
-    borderRadius: 20,
+    borderRadius: 10,
     justifyContent: 'center',
     alignItems: 'center',
     alignSelf: 'center',

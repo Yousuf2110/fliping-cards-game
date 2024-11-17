@@ -12,14 +12,15 @@ export const styles = StyleSheet.create({
     justifyContent: 'center',
     alignItems: 'center',
     height: hp(8),
-    backgroundColor: THEME.BLACK,
+    backgroundColor: THEME.PRIMARY,
     flexDirection: 'row',
   },
   title: {
     fontSize: RFPercentage(3),
     color: THEME.WHITE,
-    fontFamily: 'Poppins-SemiBold',
+    fontFamily: 'Poppins-Bold',
     marginTop: hp(0.6),
+    marginLeft: wp(1),
   },
   iconColumn: {
     width: '30%',
@@ -28,12 +29,9 @@ export const styles = StyleSheet.create({
     height: hp(10),
   },
   iconContainer: {
-    width: '13%',
-    justifyContent: 'center',
-    alignItems: 'center',
+    width: '15%',
   },
   wrapper: {
-    justifyContent: 'flex-start',
-    alignItems: 'flex-start',
+    width: '65%',
   },
 });

@@ -51,9 +51,24 @@ const Home = () => {
     <View style={styles.container}>
       <StatusBar backgroundColor={THEME.PRIMARY} />
       <View style={styles.cardsContainer}>
-        <Card style={styles.leftCard} rotation={rotateLeft} scale={scale} />
-        <Card style={styles.centerCard} rotation={'0deg'} scale={scale} />
-        <Card style={styles.rightCard} rotation={rotateRight} scale={scale} />
+        <Card
+          scale={scale}
+          cardSymbol={'♠'}
+          rotation={rotateLeft}
+          style={styles.leftCard}
+        />
+        <Card
+          scale={scale}
+          cardSymbol={'♠'}
+          rotation={'0deg'}
+          style={styles.centerCard}
+        />
+        <Card
+          scale={scale}
+          cardSymbol={'♠'}
+          rotation={rotateRight}
+          style={styles.rightCard}
+        />
       </View>
       <AnimatedTitle />
       <View style={styles.footer}>

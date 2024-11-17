@@ -2,18 +2,11 @@ import React from 'react';
 import {View, Text, TouchableOpacity} from 'react-native';
 import {styles} from './styles';
 import AntDesign from 'react-native-vector-icons/AntDesign';
+import Ionicons from 'react-native-vector-icons/Ionicons';
 import {THEME} from '../../constants/theme';
 import {useNavigation} from '@react-navigation/native';
-import ResetSvg from '../../assets/svg/resetSvg';
-import {SCREEN} from '../../constants/screen';
 
-const Header = ({
-  title,
-  setModalVisible,
-  onPressResetGame,
-  hideIcons,
-  screenName,
-}: any) => {
+const Header = ({level, seconds, hideIcons}: any) => {
   const navigation: any = useNavigation();
 
   return (
@@ -21,38 +14,25 @@ const Header = ({
       <TouchableOpacity
         activeOpacity={0.7}
         delayPressIn={0}
-        onPress={() => {
-          if (screenName === 'TermsConditions' || 'PrivacyPolicy') {
-            navigation.navigate(SCREEN.HOME);
-          } else {
-            navigation.goBack();
-          }
-        }}
+        onPress={() => navigation.goBack()}
         style={styles.iconContainer}>
-        <AntDesign name="arrowleft" color={THEME.WHITE} size={25} />
+        <Ionicons name="chevron-back-outline" color={THEME.WHITE} size={25} />
       </TouchableOpacity>
-      <View
-        style={[styles.wrapper, {width: hideIcons === true ? '90%' : '62%'}]}>
-        <Text style={styles.title}>{title}</Text>
+      <View style={styles.wrapper}>
+        <Text style={styles.title}>Level # {level}</Text>
       </View>
-      {!hideIcons && (
-        <>
-          <TouchableOpacity
-            activeOpacity={0.7}
-            delayPressIn={0}
-            onPress={onPressResetGame}
-            style={[styles.iconContainer, {left: 5}]}>
-            <ResetSvg width={28} height={28} />
-          </TouchableOpacity>
-          <TouchableOpacity
-            activeOpacity={0.7}
-            delayPressIn={0}
-            onPress={() => setModalVisible(true)}
-            style={styles.iconContainer}>
-            <AntDesign name="setting" color={THEME.WHITE} size={25} />
-          </TouchableOpacity>
-        </>
-      )}
+      <View
+        style={[
+          styles.iconContainer,
+          {
+            alignItems: 'center',
+            flexDirection: 'row',
+            justifyContent: 'flex-end',
+          },
+        ]}>
+        <AntDesign name="clockcircle" color={THEME.WHITE} size={20} />
+        <Text style={styles.title}>{seconds}s</Text>
+      </View>
     </View>
   );
 };
