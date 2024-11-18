@@ -6,5 +6,6 @@ export const THEME = {
   BACKGROUND: '#1F1F2F',
   RED: '#FF0000',
   YELLOW: '#FFFF00',
+  GREEN: '#4caf50',
   MODAL_BACKGROUND: 'rgba(65, 65, 67, 0.77)',
 };

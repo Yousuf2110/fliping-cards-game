@@ -6,6 +6,7 @@ import {
   TouchableOpacity,
   Alert,
   FlatList,
+  Dimensions,
 } from 'react-native';
 import {styles} from './styles';
 import Header from '../../components/header';
@@ -28,6 +29,8 @@ const Game: React.FC = () => {
   const [timer, setTimer] = useState<number>(level <= 7 ? 200 : 100);
   const [levelInfoModal, setLevelInfoModal] = useState<boolean>(false);
 
+  const screenWidth = Dimensions.get('window').width;
+
   const generateUniqueNumber = (usedNumbers: number[]): number => {
     let num: number;
     do {
@@ -38,8 +41,14 @@ const Game: React.FC = () => {
   };
 
   const getColumnsByLevel = (level: number): number => {
-    const columns = [2, 3, 4, 5, 3, 5, 4, 5, 5, 5];
+    const columns = [2, 2, 3, 3, 3, 4, 4, 4, 4, 4];
     return columns[level - 1] || 2;
+  };
+
+  const getCardSize = (level: number) => {
+    const columns = getColumnsByLevel(level);
+    const cardWidth = screenWidth / columns - 10;
+    return {width: cardWidth, height: cardWidth * 1.1};
   };
 
   useEffect(() => {
@@ -158,32 +167,37 @@ const Game: React.FC = () => {
   const resetGame = () => {
     setFlippedCards([]);
     setMatchedCards([]);
-    setLevel(1);
-    setTimer(10);
+    setTimer(level <= 7 ? 200 : 100);
     initializeCards();
   };
 
-  const renderCard = ({item}: {item: Card}) => (
-    <TouchableOpacity
-      onPress={() => handleCardPress(item)}
-      style={[
-        styles.card,
-        {transform: [{scale}]},
-        matchedCards.includes(item.id) && styles.matchedCard,
-      ]}>
-      <Text style={styles.cardText}>
-        {flippedCards.some(flippedCard => flippedCard.id === item.id) ||
-        matchedCards.includes(item.id)
-          ? item.number
-          : '?'}
-      </Text>
-    </TouchableOpacity>
-  );
+  const renderCard = ({item}: {item: Card}) => {
+    const {width, height} = getCardSize(level);
+    return (
+      <TouchableOpacity
+        onPress={() => handleCardPress(item)}
+        style={[
+          styles.card,
+          {
+            width,
+            height,
+            transform: [{scale}],
+          },
+          matchedCards.includes(item.id) && styles.matchedCard,
+        ]}>
+        <Text style={styles.cardText}>
+          {flippedCards.some(flippedCard => flippedCard.id === item.id) ||
+          matchedCards.includes(item.id)
+            ? item.number
+            : '?'}
+        </Text>
+      </TouchableOpacity>
+    );
+  };
 
   return (
     <View style={styles.container}>
       <Header seconds={timer.toString()} level={level.toString()} />
-
       <FlatList
         data={cards}
         renderItem={renderCard}
@@ -191,8 +205,11 @@ const Game: React.FC = () => {
         numColumns={getColumnsByLevel(level)}
         contentContainerStyle={styles.cardsContainer}
         key={level}
+        columnWrapperStyle={{
+          width: '100%',
+          justifyContent: 'center',
+        }}
       />
-
       <View style={styles.footer}>
         <View style={{width: '50%'}}>
           <Button title={'Reset'} onPress={resetGame} />
@@ -204,7 +221,6 @@ const Game: React.FC = () => {
           />
         </View>
       </View>
-
       <LevelInfo
         onPress={handleLevelOutcome}
         levelInfoModal={levelInfoModal}
