@@ -13,6 +13,7 @@ const LevelInfo = ({
   setLevelInfoModal,
   onPress,
   winStatus,
+  resetGame,
 }: any) => {
   const navigation = useNavigation();
   const scaleAnim = useRef(new Animated.Value(0)).current;
@@ -32,6 +33,11 @@ const LevelInfo = ({
     }).start();
   }, []);
 
+  const handleTryAgain = () => {
+    resetGame();
+    setLevelInfoModal(false);
+  };
+
   return (
     <Modal
       animationType="slide"
@@ -41,21 +47,29 @@ const LevelInfo = ({
       <View style={styles.container}>
         <View style={styles.modalView}>
           <Animated.View
-            style={[styles.iconRow, {transform: [{scale: scaleAnim}]}]}>
+            style={[
+              styles.iconRow,
+              {
+                transform: [{scale: scaleAnim}],
+                flexDirection: winStatus ? 'row' : 'column',
+              },
+            ]}>
             {winStatus ? (
               <AntDesign name="star" color={THEME.YELLOW} size={100} />
             ) : (
               <Entypo name="emoji-sad" color={THEME.YELLOW} size={100} />
             )}
           </Animated.View>
+
           <Animated.Text style={[styles.youWonText, {opacity: textOpacity}]}>
             {winStatus ? 'You Won!' : 'You Lost!'}
           </Animated.Text>
 
           <Button
             title={winStatus ? 'Next Level' : 'Try Again'}
-            onPress={onPress}
+            onPress={winStatus ? onPress : handleTryAgain}
           />
+
           <Button title="Main Menu" onPress={() => navigation.goBack()} />
         </View>
       </View>

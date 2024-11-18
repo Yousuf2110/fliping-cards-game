@@ -3,11 +3,12 @@ import {View, Text, TouchableOpacity} from 'react-native';
 import {useNavigation} from '@react-navigation/native';
 import Ionicons from 'react-native-vector-icons/Ionicons';
 import AntDesign from 'react-native-vector-icons/AntDesign';
+import Feather from 'react-native-vector-icons/Feather';
 
 import {styles} from './styles';
 import {THEME} from '../../constants/theme';
 
-const Header = ({level, seconds, hideIcons}: any) => {
+const Header = ({level, seconds, resetGame}: any) => {
   const navigation: any = useNavigation();
 
   return (
@@ -22,6 +23,12 @@ const Header = ({level, seconds, hideIcons}: any) => {
       <View style={styles.wrapper}>
         <Text style={styles.title}>Level # {level}</Text>
       </View>
+      <TouchableOpacity
+        activeOpacity={0.7}
+        style={styles.iconContainer}
+        onPress={resetGame}>
+        <Feather name="refresh-ccw" color={THEME.WHITE} size={22} />
+      </TouchableOpacity>
       <View
         style={[
           styles.iconContainer,
@@ -29,6 +36,7 @@ const Header = ({level, seconds, hideIcons}: any) => {
             alignItems: 'center',
             flexDirection: 'row',
             justifyContent: 'flex-end',
+            marginRight: 20,
           },
         ]}>
         <AntDesign name="clockcircle" color={THEME.WHITE} size={20} />

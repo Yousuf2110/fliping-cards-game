@@ -1,8 +1,5 @@
 import {StyleSheet} from 'react-native';
-import {
-  heightPercentageToDP as hp,
-  widthPercentageToDP as wp,
-} from 'react-native-responsive-screen';
+import {heightPercentageToDP as hp} from 'react-native-responsive-screen';
 import {THEME} from '../../constants/theme';
 import {RFPercentage} from 'react-native-responsive-fontsize';
 
@@ -20,7 +17,6 @@ export const styles = StyleSheet.create({
     color: THEME.WHITE,
     fontFamily: 'Poppins-Bold',
     marginTop: hp(0.6),
-    marginLeft: wp(1),
   },
   iconColumn: {
     width: '30%',
@@ -30,8 +26,9 @@ export const styles = StyleSheet.create({
   },
   iconContainer: {
     width: '15%',
+    alignItems: 'center',
   },
   wrapper: {
-    width: '65%',
+    width: '55%',
   },
 });

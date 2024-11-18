@@ -20,7 +20,7 @@ type Card = {
 };
 
 const Game: React.FC = () => {
-  const [level, setLevel] = useState<number>(10);
+  const [level, setLevel] = useState<number>(3);
   const [cards, setCards] = useState<Card[]>([]);
   const [winStatus, setWinStatus] = useState<boolean>(false);
   const [flippedCards, setFlippedCards] = useState<Card[]>([]);
@@ -28,7 +28,6 @@ const Game: React.FC = () => {
   const [cardAnimation] = useState<Animated.Value>(new Animated.Value(0));
   const [timer, setTimer] = useState<number>(level <= 7 ? 200 : 100);
   const [levelInfoModal, setLevelInfoModal] = useState<boolean>(false);
-
   const screenWidth = Dimensions.get('window').width;
 
   const generateUniqueNumber = (usedNumbers: number[]): number => {
@@ -197,7 +196,11 @@ const Game: React.FC = () => {
 
   return (
     <View style={styles.container}>
-      <Header seconds={timer.toString()} level={level.toString()} />
+      <Header
+        seconds={timer.toString()}
+        level={level.toString()}
+        resetGame={resetGame}
+      />
       <FlatList
         data={cards}
         renderItem={renderCard}
@@ -210,22 +213,12 @@ const Game: React.FC = () => {
           justifyContent: 'center',
         }}
       />
-      <View style={styles.footer}>
-        <View style={{width: '50%'}}>
-          <Button title={'Reset'} onPress={resetGame} />
-        </View>
-        <View style={{width: '50%'}}>
-          <Button
-            title={'Pause'}
-            onPress={() => setLevelInfoModal(!levelInfoModal)}
-          />
-        </View>
-      </View>
       <LevelInfo
         onPress={handleLevelOutcome}
         levelInfoModal={levelInfoModal}
         setLevelInfoModal={setLevelInfoModal}
         winStatus={winStatus}
+        resetGame={resetGame}
       />
     </View>
   );

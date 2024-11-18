@@ -36,11 +36,4 @@ export const styles = StyleSheet.create({
     color: '#333',
     fontWeight: 'bold',
   },
-  footer: {
-    width: '100%',
-    flexDirection: 'row',
-    justifyContent: 'center',
-    alignItems: 'center',
-    paddingBottom: 16,
-  },
 });

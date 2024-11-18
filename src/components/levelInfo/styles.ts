@@ -1,5 +1,8 @@
 import {StyleSheet} from 'react-native';
-import {heightPercentageToDP as hp} from 'react-native-responsive-screen';
+import {
+  heightPercentageToDP as hp,
+  widthPercentageToDP as wp,
+} from 'react-native-responsive-screen';
 import {THEME} from '../../constants/theme';
 import {RFPercentage} from 'react-native-responsive-fontsize';
 
@@ -15,6 +18,7 @@ export const styles = StyleSheet.create({
     width: '100%',
     justifyContent: 'center',
     marginTop: hp(8),
+    alignItems: 'center',
   },
   modalView: {
     width: '90%',
@@ -32,6 +36,7 @@ export const styles = StyleSheet.create({
     shadowOpacity: 0.25,
     shadowRadius: 4,
     elevation: 5,
+    paddingHorizontal: wp(2),
   },
   youWonText: {
     fontSize: RFPercentage(5),
