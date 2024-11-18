@@ -9,11 +9,38 @@ export const styles = StyleSheet.create({
     alignItems: 'center',
   },
   cardsContainer: {
-    flexDirection: 'row',
-    justifyContent: 'center',
+    flex: 1,
+    // flexDirection: 'row',
+    justifyContent: 'space-around',
     alignItems: 'center',
     width: '100%',
-    marginTop: hp(10),
+  },
+  matchedCard: {
+    backgroundColor: '#4caf50', // Green background for matched cards
+    borderColor: '#388e3c', // Darker green border
+    borderWidth: 2,
+    transform: [{scale: 1.1}], // Slight scale for visual effect
+    opacity: 0.8, // Slight transparency for matched cards
+  },
+  card: {
+    width: 60,
+    height: 80,
+    marginVertical: hp(1),
+    backgroundColor: '#fff',
+    borderRadius: 10,
+    shadowColor: '#000',
+    shadowOffset: {width: 0, height: 4},
+    shadowOpacity: 0.2,
+    shadowRadius: 5,
+    elevation: 5,
+    alignItems: 'center',
+    justifyContent: 'center',
+    marginLeft: 10,
+  },
+  cardText: {
+    fontSize: 30,
+    color: '#333',
+    fontWeight: 'bold',
   },
   leftCard: {
     backgroundColor: THEME.WHITE,
