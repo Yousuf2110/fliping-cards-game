@@ -27,7 +27,12 @@ const Header = ({level, seconds, resetGame}: any) => {
         activeOpacity={0.7}
         style={styles.iconContainer}
         onPress={resetGame}>
-        <Feather name="refresh-ccw" color={THEME.WHITE} size={22} />
+        <Feather
+          name="refresh-ccw"
+          color={THEME.WHITE}
+          size={22}
+          style={{right: 10}}
+        />
       </TouchableOpacity>
       <View
         style={[
@@ -39,7 +44,12 @@ const Header = ({level, seconds, resetGame}: any) => {
             marginRight: 20,
           },
         ]}>
-        <AntDesign name="clockcircle" color={THEME.WHITE} size={20} />
+        <AntDesign
+          name="clockcircle"
+          color={THEME.WHITE}
+          size={20}
+          style={{right: 5}}
+        />
         <Text style={styles.title}>{seconds}s</Text>
       </View>
     </View>

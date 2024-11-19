@@ -1,5 +1,5 @@
 import React, {useEffect, useRef} from 'react';
-import {Animated, Modal, View, Text} from 'react-native';
+import {Animated, Modal, View} from 'react-native';
 import {useNavigation} from '@react-navigation/native';
 import AntDesign from 'react-native-vector-icons/AntDesign';
 import Entypo from 'react-native-vector-icons/Entypo';
@@ -14,6 +14,7 @@ const LevelInfo = ({
   onPress,
   winStatus,
   resetGame,
+  resetTimer,
 }: any) => {
   const navigation = useNavigation();
   const scaleAnim = useRef(new Animated.Value(0)).current;
@@ -34,6 +35,7 @@ const LevelInfo = ({
   }, []);
 
   const handleTryAgain = () => {
+    resetTimer();
     resetGame();
     setLevelInfoModal(false);
   };
@@ -51,7 +53,6 @@ const LevelInfo = ({
               styles.iconRow,
               {
                 transform: [{scale: scaleAnim}],
-                flexDirection: winStatus ? 'row' : 'column',
               },
             ]}>
             {winStatus ? (
@@ -60,16 +61,10 @@ const LevelInfo = ({
               <Entypo name="emoji-sad" color={THEME.YELLOW} size={100} />
             )}
           </Animated.View>
-
-          <Animated.Text style={[styles.youWonText, {opacity: textOpacity}]}>
-            {winStatus ? 'You Won!' : 'You Lost!'}
-          </Animated.Text>
-
           <Button
             title={winStatus ? 'Next Level' : 'Try Again'}
-            onPress={winStatus ? onPress : handleTryAgain}
+            onPress={winStatus ? onPress : handleTryAgain} // Handle Try Again logic
           />
-
           <Button title="Main Menu" onPress={() => navigation.goBack()} />
         </View>
       </View>

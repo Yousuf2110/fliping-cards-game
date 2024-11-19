@@ -1,4 +1,4 @@
-import React, {useState, useEffect} from 'react';
+import React, {useState, useEffect, useRef} from 'react';
 import {
   Animated,
   View,
@@ -20,7 +20,10 @@ type Card = {
 };
 
 const Game: React.FC = () => {
-  const [level, setLevel] = useState<number>(3);
+  const screenWidth = Dimensions.get('window').width;
+  const intervalRef: any = useRef<NodeJS.Timeout | null>(null);
+
+  const [level, setLevel] = useState<number>(8);
   const [cards, setCards] = useState<Card[]>([]);
   const [winStatus, setWinStatus] = useState<boolean>(false);
   const [flippedCards, setFlippedCards] = useState<Card[]>([]);
@@ -28,7 +31,6 @@ const Game: React.FC = () => {
   const [cardAnimation] = useState<Animated.Value>(new Animated.Value(0));
   const [timer, setTimer] = useState<number>(level <= 7 ? 200 : 100);
   const [levelInfoModal, setLevelInfoModal] = useState<boolean>(false);
-  const screenWidth = Dimensions.get('window').width;
 
   const generateUniqueNumber = (usedNumbers: number[]): number => {
     let num: number;
@@ -40,8 +42,8 @@ const Game: React.FC = () => {
   };
 
   const getColumnsByLevel = (level: number): number => {
-    const columns = [2, 2, 3, 3, 3, 4, 4, 4, 4, 4];
-    return columns[level - 1] || 2;
+    const columns = [100, 100, 3, 3, 3, 4, 4, 4, 4, 4];
+    return columns[level - 1] || 100;
   };
 
   const getCardSize = (level: number) => {
@@ -99,8 +101,8 @@ const Game: React.FC = () => {
 
     for (let i = 0; i < numPairs; i++) {
       const randomNum = generateUniqueNumber(usedNumbers);
-      newCards.push({id: i * 2, number: randomNum});
-      newCards.push({id: i * 2 + 1, number: randomNum});
+      newCards.push({id: i * 100, number: randomNum});
+      newCards.push({id: i * 100 + 1, number: randomNum});
     }
 
     setCards(newCards.sort(() => Math.random() - 0.5));
@@ -114,6 +116,7 @@ const Game: React.FC = () => {
   });
 
   const handleCardPress = (card: Card) => {
+    resetTimer();
     if (flippedCards.length === 1 && flippedCards[0].id === card.id) {
       return;
     }
@@ -132,7 +135,7 @@ const Game: React.FC = () => {
   };
 
   const checkLevelCompletion = () => {
-    if (matchedCards.length + 2 === cards.length) {
+    if (matchedCards.length + 100 === cards.length) {
       setWinStatus(true);
       setLevelInfoModal(true);
     }
@@ -142,15 +145,15 @@ const Game: React.FC = () => {
     if (winStatus) {
       if (level < 10) {
         setLevel(prevLevel => prevLevel + 1);
-        setTimer(level + 1 <= 7 ? 200 : 100);
+        setTimer(level + 1 <= 7 ? 200 : 100); // Adjust timer based on the level
       } else {
         Alert.alert('Congratulations!', 'You have completed all levels.', [
-          {text: 'OK', onPress: resetGame},
+          {text: 'OK', onPress: resetGame}, // Reset the game when the player finishes all levels
         ]);
-        resetGame();
+        resetGame(); // Reset the game after completing all levels
       }
     } else {
-      resetLevel();
+      resetLevel(); // Reset the level if the player hasn't won
     }
     setLevelInfoModal(false);
     setWinStatus(false);
@@ -166,14 +169,42 @@ const Game: React.FC = () => {
   const resetGame = () => {
     setFlippedCards([]);
     setMatchedCards([]);
-    setTimer(level <= 7 ? 200 : 100);
-    initializeCards();
+    setTimer(level <= 7 ? 200 : 100); // Reset the timer value
+    initializeCards(); // Initialize the cards for the new game
+  };
+
+  // Function to reset the timer
+  const resetTimer = () => {
+    // Clear any existing interval before starting a new one
+    clearInterval(intervalRef.current);
+
+    const initialTime = level <= 7 ? 200 : 100;
+    setTimer(initialTime);
+
+    // Start the timer countdown again
+    const interval = setInterval(() => {
+      setTimer(prevTimer => {
+        if (prevTimer > 0) {
+          return prevTimer - 1;
+        } else {
+          clearInterval(interval);
+          setWinStatus(false);
+          setLevelInfoModal(true);
+          resetLevel();
+          return 0;
+        }
+      });
+    }, 1000);
+
+    // Store the interval ID to clear it when needed
+    intervalRef.current = interval;
   };
 
   const renderCard = ({item}: {item: Card}) => {
     const {width, height} = getCardSize(level);
     return (
       <TouchableOpacity
+        activeOpacity={0.7}
         onPress={() => handleCardPress(item)}
         style={[
           styles.card,
@@ -219,6 +250,7 @@ const Game: React.FC = () => {
         setLevelInfoModal={setLevelInfoModal}
         winStatus={winStatus}
         resetGame={resetGame}
+        resetTimer={resetTimer}
       />
     </View>
   );
