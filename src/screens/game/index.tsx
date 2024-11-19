@@ -11,19 +11,23 @@ import {
 import {styles} from './styles';
 import Header from '../../components/header';
 import {Easing} from 'react-native';
-import Button from '../../components/button';
 import LevelInfo from '../../components/levelInfo';
+import {useFocusEffect, useNavigation} from '@react-navigation/native';
+import AsyncStorage from '@react-native-async-storage/async-storage';
 
 type Card = {
   id: number;
   number: number;
 };
 
+const LEVEL_STORAGE_KEY = '@memory_game_level';
+
 const Game: React.FC = () => {
+  const navigation = useNavigation();
   const screenWidth = Dimensions.get('window').width;
   const intervalRef: any = useRef<NodeJS.Timeout | null>(null);
 
-  const [level, setLevel] = useState<number>(8);
+  const [level, setLevel] = useState<number>(1);
   const [cards, setCards] = useState<Card[]>([]);
   const [winStatus, setWinStatus] = useState<boolean>(false);
   const [flippedCards, setFlippedCards] = useState<Card[]>([]);
@@ -42,7 +46,7 @@ const Game: React.FC = () => {
   };
 
   const getColumnsByLevel = (level: number): number => {
-    const columns = [100, 100, 3, 3, 3, 4, 4, 4, 4, 4];
+    const columns = [2, 2, 3, 3, 3, 4, 4, 4, 4, 4];
     return columns[level - 1] || 100;
   };
 
@@ -53,9 +57,61 @@ const Game: React.FC = () => {
   };
 
   useEffect(() => {
+    loadSavedLevel();
+  }, []);
+
+  useEffect(() => {
+    saveLevel(level);
+  }, [level]);
+
+  const loadSavedLevel = async () => {
+    try {
+      const savedLevel = await AsyncStorage.getItem(LEVEL_STORAGE_KEY);
+      if (savedLevel !== null) {
+        setLevel(parseInt(savedLevel, 10));
+      }
+    } catch (error) {
+      console.error('Error loading saved level:', error);
+    }
+  };
+
+  const saveLevel = async (currentLevel: number) => {
+    try {
+      await AsyncStorage.setItem(LEVEL_STORAGE_KEY, currentLevel.toString());
+    } catch (error) {
+      console.error('Error saving level:', error);
+    }
+  };
+
+  useEffect(() => {
     initializeCards();
     setTimer(level <= 7 ? 200 : 100);
   }, [level]);
+
+  useFocusEffect(
+    React.useCallback(() => {
+      const unsubscribe = navigation.addListener('beforeRemove', e => {
+        if (!winStatus) {
+          e.preventDefault();
+          Alert.alert(
+            'Are you sure?',
+            'Your game progress will be lost if you leave.',
+            [
+              {
+                text: 'Cancel',
+                style: 'cancel',
+              },
+              {
+                text: 'Leave',
+                onPress: () => navigation.dispatch(e.data.action),
+              },
+            ],
+          );
+        }
+      });
+      return unsubscribe;
+    }, [navigation, winStatus]),
+  );
 
   useEffect(() => {
     Animated.loop(
@@ -116,7 +172,6 @@ const Game: React.FC = () => {
   });
 
   const handleCardPress = (card: Card) => {
-    resetTimer();
     if (flippedCards.length === 1 && flippedCards[0].id === card.id) {
       return;
     }
@@ -133,11 +188,13 @@ const Game: React.FC = () => {
       }
     }
   };
-
   const checkLevelCompletion = () => {
-    if (matchedCards.length + 100 === cards.length) {
+    const totalCards = cards.length;
+    if (matchedCards.length + 2 === totalCards) {
       setWinStatus(true);
-      setLevelInfoModal(true);
+      setTimeout(() => {
+        setLevelInfoModal(true);
+      }, 1000);
     }
   };
 
@@ -145,15 +202,15 @@ const Game: React.FC = () => {
     if (winStatus) {
       if (level < 10) {
         setLevel(prevLevel => prevLevel + 1);
-        setTimer(level + 1 <= 7 ? 200 : 100); // Adjust timer based on the level
+        setTimer(level + 1 <= 7 ? 200 : 100);
       } else {
         Alert.alert('Congratulations!', 'You have completed all levels.', [
-          {text: 'OK', onPress: resetGame}, // Reset the game when the player finishes all levels
+          {text: 'OK', onPress: resetGame},
         ]);
-        resetGame(); // Reset the game after completing all levels
+        resetGame();
       }
     } else {
-      resetLevel(); // Reset the level if the player hasn't won
+      resetLevel();
     }
     setLevelInfoModal(false);
     setWinStatus(false);
@@ -169,19 +226,15 @@ const Game: React.FC = () => {
   const resetGame = () => {
     setFlippedCards([]);
     setMatchedCards([]);
-    setTimer(level <= 7 ? 200 : 100); // Reset the timer value
-    initializeCards(); // Initialize the cards for the new game
+    setTimer(level <= 7 ? 200 : 100);
+    initializeCards();
   };
 
-  // Function to reset the timer
   const resetTimer = () => {
-    // Clear any existing interval before starting a new one
     clearInterval(intervalRef.current);
 
     const initialTime = level <= 7 ? 200 : 100;
     setTimer(initialTime);
-
-    // Start the timer countdown again
     const interval = setInterval(() => {
       setTimer(prevTimer => {
         if (prevTimer > 0) {
@@ -195,8 +248,6 @@ const Game: React.FC = () => {
         }
       });
     }, 1000);
-
-    // Store the interval ID to clear it when needed
     intervalRef.current = interval;
   };
 

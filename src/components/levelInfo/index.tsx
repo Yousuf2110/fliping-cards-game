@@ -40,6 +40,11 @@ const LevelInfo = ({
     setLevelInfoModal(false);
   };
 
+  const handleNextLevel = () => {
+    setLevelInfoModal(false);
+    onPress();
+  };
+
   return (
     <Modal
       animationType="slide"
@@ -56,14 +61,32 @@ const LevelInfo = ({
               },
             ]}>
             {winStatus ? (
-              <AntDesign name="star" color={THEME.YELLOW} size={100} />
+              <>
+                <AntDesign name="star" color={THEME.YELLOW} size={100} />
+                <AntDesign
+                  name="star"
+                  color={THEME.YELLOW}
+                  size={100}
+                  style={{bottom: 50}}
+                />
+                <AntDesign name="star" color={THEME.YELLOW} size={100} />
+              </>
             ) : (
               <Entypo name="emoji-sad" color={THEME.YELLOW} size={100} />
             )}
           </Animated.View>
+          <Animated.Text
+            style={[
+              styles.youWonText,
+              {
+                transform: [{scale: scaleAnim}],
+              },
+            ]}>
+            {winStatus ? 'You Won!' : 'You Loss!'}
+          </Animated.Text>
           <Button
             title={winStatus ? 'Next Level' : 'Try Again'}
-            onPress={winStatus ? onPress : handleTryAgain} // Handle Try Again logic
+            onPress={winStatus ? handleNextLevel : handleTryAgain}
           />
           <Button title="Main Menu" onPress={() => navigation.goBack()} />
         </View>
